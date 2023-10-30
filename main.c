@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:24:37 by famir             #+#    #+#             */
-/*   Updated: 2023/10/26 20:19:18 by famir            ###   ########.fr       */
+/*   Updated: 2023/10/30 19:57:41 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 
 int main()
 {
-    char *text;
-    
     int fd = open("index.txt", O_RDONLY);
-    text = get_next_line(fd);
-    printf("%s", text);
+    get_next_line(fd);
 }

@@ -4,7 +4,7 @@ OBJS			= $(SRCS:.c=.o)
 
 CC				= cc -g
 RM				= rm -f
-CFLAGS			= -Wall -Wextra -Werror -D BUFFER_SIZE=200
+CFLAGS			= -Wall -Wextra -Werror -D BUFFER_SIZE=100
 
 NAME			= get_next_line.a
 
