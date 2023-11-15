@@ -38,4 +38,5 @@ unsigned int ft_strlen(const char *s);
 t_bool is_empty(t_queue *queue);
 void enqueue(t_queue *queue, void *data);
 void dequeue(t_queue *queue);
+t_queue *create_queue();
 #endif
