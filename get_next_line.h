@@ -11,25 +11,31 @@
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#define GET_NEXT_LINE_H
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 42
+#define BUFFER_SIZE 6
 #endif
 
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-
-typedef struct stack
+typedef struct queue
 {
-    char    *data;
-    int     top;
-}   t_stack;
+    void *content;
+    struct queue *next;
+    int top;
+} t_queue;
 
-char            *get_next_line(int fd);
-unsigned int	ft_strlen(const char *s);
-void	        *ft_memcpy(void *dst, const void *src, size_t n);
+typedef unsigned int t_bool;
 
+#define TRUE 1
+#define FALSE 0
+
+char *get_next_line(int fd);
+unsigned int ft_strlen(const char *s);
+t_bool is_empty(t_queue *queue);
+void enqueue(t_queue *queue, void *data);
+void dequeue(t_queue *queue);
 #endif
