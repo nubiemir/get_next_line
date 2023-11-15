@@ -24,7 +24,7 @@
 typedef struct queue
 {
     void *content;
-    struct queue *next;
+    struct queue *prev;
     int top;
 } t_queue;
 
