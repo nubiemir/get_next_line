@@ -1,38 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/07 20:00:20 by famir             #+#    #+#             */
-/*   Updated: 2023/10/30 20:01:48 by famir            ###   ########.fr       */
+/*   Created: 2023/10/07 19:56:42 by famir             #+#    #+#             */
+/*   Updated: 2023/10/30 19:36:41 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	find_line(char *str)
+unsigned int ft_strlen(const char *s)
 {
-	int counter = 0;
-	
-	while (str[counter] && str[counter] != '\n')
+	unsigned int res;
+	unsigned int counter;
+
+	counter = 0;
+	res = 0;
+	while (s[counter])
+	{
 		counter++;
-	return counter;
-}	
+		res++;
+	}
+	return (res);
+}
 
-char	*get_next_line(int fd)
+t_bool is_empty(t_queue *queue)
 {
-    // static char *remainder;
-    char        *res;
-    int			line_number;
-
-	
-    res = malloc((BUFFER_SIZE + 1) * sizeof(char));
-    ssize_t read_value = read(fd, res, BUFFER_SIZE);
-    line_number = find_line(res);
-    printf("read_value ==> %ld\nline_number ==> %d", read_value, line_number);
-	
-	
-    return res;
+	if (!queue)
+		return (0);
+	if (queue->top == -1)
+		return (0);
+	return (1);
+}
+void enqueue(t_queue *queue, void *data)
+{
+}
+void dequeue(t_queue *queue)
+{
 }
