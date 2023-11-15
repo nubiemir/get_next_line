@@ -12,10 +12,10 @@
 
 #include "get_next_line.h"
 
-unsigned int	ft_strlen(const char *s)
+unsigned int ft_strlen(const char *s)
 {
-	unsigned int	res;
-	unsigned int	counter;
+	unsigned int res;
+	unsigned int counter;
 
 	counter = 0;
 	res = 0;
@@ -27,18 +27,17 @@ unsigned int	ft_strlen(const char *s)
 	return (res);
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+t_bool is_empty(t_queue *queue)
 {
-	unsigned int	i;
-
-	i = 0;
-	if (!(char *) dst && !(char *) src)
+	if (!queue)
 		return (0);
-	while (i < n)
-	{
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-		i++;
-	}
-	return (dst);
+	if (queue->top == -1)
+		return (0);
+	return (1);
 }
-
+void enqueue(t_queue *queue, void *data)
+{
+}
+void dequeue(t_queue *queue)
+{
+}
