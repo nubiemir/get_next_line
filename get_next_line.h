@@ -21,11 +21,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct node
+{
+    void *data;
+    struct node *next;
+
+} t_node;
+
 typedef struct queue
 {
-    void *content;
-    struct queue *prev;
-    int top;
+    t_node *front;
+    t_node *rear;
 } t_queue;
 
 typedef unsigned int t_bool;
@@ -37,6 +43,6 @@ char *get_next_line(int fd);
 unsigned int ft_strlen(const char *s);
 t_bool is_empty(t_queue *queue);
 void enqueue(t_queue *queue, void *data);
-void dequeue(t_queue *queue);
+void *dequeue(t_queue *queue);
 t_queue *create_queue();
 #endif
