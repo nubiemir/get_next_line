@@ -14,21 +14,51 @@
 
 int find_line(char *str)
 {
-    int counter = 0;
+    int counter;
 
-    while (str[counter] && str[counter] != '\n')
+    counter = 0;
+    while (counter < BUFFER_SIZE)
+    {
+        if (str[counter] == '\n')
+        {
+            if (str[counter + 1])
+                str = str + (counter + 1);
+            return (1);
+        }
         counter++;
-    return counter;
+    }
+    return (0);
+}
+
+t_queue *read_file(int fd)
+{
+    int bytes_read;
+    t_queue *queue;
+    char *buffer;
+
+    buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
+    bytes_read = read(fd, buffer, BUFFER_SIZE);
+    if (bytes_read == 0)
+        return (NULL);
+    queue = create_queue();
+    while (!find_line(buffer))
+    {
+        enqueue(queue, buffer);
+        bytes_read = read(fd, buffer, BUFFER_SIZE);
+        if (bytes_read == 0)
+            return (NULL);
+    }
+    return (queue);
 }
 
 char *get_next_line(int fd)
 {
-    // static char *file;
-    char *res;
+    static char *buffer;
+    // char *line;
 
-    res = malloc((BUFFER_SIZE) * sizeof(char));
-    read(fd, res, BUFFER_SIZE);
-
-    printf("read buffer: %s\n", res);
-    return (res);
+    buffer = malloc((BUFFER_SIZE) * sizeof(char));
+    t_queue *queue = read_file(fd);
+    printf("first: %s\n", queue->rear->data);
+    printf("buffer: %s\n", buffer);
+    return (buffer);
 }
