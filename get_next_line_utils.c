@@ -42,7 +42,7 @@ t_bool is_empty(t_queue *queue)
 {
 	return (queue->front == NULL);
 }
-void enqueue(t_queue *queue, void *data)
+void enqueue(t_queue *queue, char *data)
 {
 	t_node *new_node;
 
@@ -62,7 +62,7 @@ void enqueue(t_queue *queue, void *data)
 }
 void *dequeue(t_queue *queue)
 {
-	void *data;
+	char *data;
 
 	if (!queue || is_empty(queue))
 		return (NULL);
