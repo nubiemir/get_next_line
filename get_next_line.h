@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:33 by famir             #+#    #+#             */
-/*   Updated: 2023/10/30 19:36:52 by famir            ###   ########.fr       */
+/*   Updated: 2023/11/19 17:09:17 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,9 @@ typedef unsigned int t_bool;
 
 char *get_next_line(int fd);
 unsigned int ft_strlen(const char *s);
-t_bool is_empty(t_queue *queue);
 void enqueue(t_queue *queue, char *data);
-void *dequeue(t_queue *queue);
+char *dequeue(t_queue *queue);
 t_queue *create_queue();
-t_queue *read_file(int fd);
-int find_line(char *str);
+char *read_file(int fd, t_queue *queue);
+int *find_line(char *str);
 #endif

@@ -6,59 +6,68 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 20:00:20 by famir             #+#    #+#             */
-/*   Updated: 2023/10/30 20:01:48 by famir            ###   ########.fr       */
+/*   Updated: 2023/11/19 17:10:37 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int find_line(char *str)
-{
-    int counter;
 
+
+char **split_new_line(char *str)
+{
+    char **res;
+    int    index;
+    int    counter;
+    
     counter = 0;
-    while (counter < BUFFER_SIZE)
+    res = (char **)malloc(3 * sizeof(char **));
+    index = find_line(str)[1];
+    res[0] = (char *)malloc((index + 1) * sizeof(char));
+    res[1] = (char *)malloc((BUFFER_SIZE - index - 1) * sizeof(char));
+    while (counter < index + 1 && str[counter])
     {
-        if (str[counter] == '\n')
-        {
-            if (str[counter + 1])
-                str = str + (counter + 1);
-            return (1);
-        }
+        res[0][counter] = str[counter];
         counter++;
     }
-    return (0);
+    res[1] = str + counter;
+    return (res);
 }
 
-t_queue *read_file(int fd)
+char *read_file(int fd, t_queue *queue)
 {
     int bytes_read;
-    t_queue *queue;
     char *buffer;
+    char **split_buffer;
 
     buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
     bytes_read = read(fd, buffer, BUFFER_SIZE);
     if (bytes_read == 0)
         return (NULL);
-    queue = create_queue();
-    while (!find_line(buffer))
+    while (!find_line(buffer)[0])
     {
         enqueue(queue, buffer);
+        buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
         bytes_read = read(fd, buffer, BUFFER_SIZE);
         if (bytes_read == 0)
             return (NULL);
     }
-    return (queue);
+    split_buffer = split_new_line(buffer);
+    enqueue(queue, split_buffer[0]);
+    return (split_buffer[1]);
 }
 
 char *get_next_line(int fd)
 {
     static char *buffer;
+    t_queue *queue;
     // char *line;
+    queue = create_queue();
 
-    buffer = malloc((BUFFER_SIZE) * sizeof(char));
-    t_queue *queue = read_file(fd);
-    printf("first: %s\n", queue->rear->data);
-    printf("buffer: %s\n", buffer);
+    buffer = read_file(fd, queue);
+    printf("first: %s\n", queue->front->data);
+    printf("second: %s\n", queue->front->next->data);
+    printf("rear: %s\n", queue->rear->data);
+    printf("remainder: %s\n", buffer);
     return (buffer);
 }

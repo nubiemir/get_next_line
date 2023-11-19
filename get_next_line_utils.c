@@ -6,25 +6,32 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:42 by famir             #+#    #+#             */
-/*   Updated: 2023/10/30 19:36:41 by famir            ###   ########.fr       */
+/*   Updated: 2023/11/19 17:09:15 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-unsigned int ft_strlen(const char *s)
+int *find_line(char *str)
 {
-	unsigned int res;
-	unsigned int counter;
+    int counter;
+    int *res;
 
-	counter = 0;
-	res = 0;
-	while (s[counter])
-	{
-		counter++;
-		res++;
-	}
-	return (res);
+    counter = 0;
+    res = malloc(sizeof(int) * 2);
+    while (counter < BUFFER_SIZE)
+    {
+        if (str[counter] == '\n')
+        {
+            res[0] = 1;
+            res[1] = counter;
+            return (res);
+        }
+        counter++;
+    }
+    res[0] = 0;
+    res[1] = 0;
+    return (res);
 }
 
 t_queue *create_queue()
@@ -38,10 +45,6 @@ t_queue *create_queue()
 	return queue;
 }
 
-t_bool is_empty(t_queue *queue)
-{
-	return (queue->front == NULL);
-}
 void enqueue(t_queue *queue, char *data)
 {
 	t_node *new_node;
@@ -50,7 +53,7 @@ void enqueue(t_queue *queue, char *data)
 	new_node->data = data;
 	new_node->next = NULL;
 
-	if (is_empty(queue))
+	if (queue->front == NULL)
 	{
 		queue->front = queue->rear = new_node;
 	}
@@ -60,11 +63,11 @@ void enqueue(t_queue *queue, char *data)
 		queue->rear = new_node;
 	}
 }
-void *dequeue(t_queue *queue)
+char *dequeue(t_queue *queue)
 {
 	char *data;
 
-	if (!queue || is_empty(queue))
+	if (!queue || queue->front == NULL)
 		return (NULL);
 	data = queue->front->data;
 	queue->front = queue->front->next;
