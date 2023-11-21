@@ -34,12 +34,23 @@ char **split_new_line(char *str)
     return (res);
 }
 
-char *read_file(int fd, t_queue *queue)
+char *read_file(int fd, t_queue *queue, char *remainder)
 {
     int bytes_read;
     char *buffer;
     char **split_buffer;
 
+    if (remainder)
+    {
+        while (!find_line(remainder)[0])
+        {
+            enqueue(queue, remainder);
+            remainder = remainder + BUFFER_SIZE;
+        }
+        split_buffer = split_new_line(remainder);
+        enqueue(queue, split_buffer[0]);
+        return (split_buffer[1]);
+    }
     buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
     bytes_read = read(fd, buffer, BUFFER_SIZE);
     if (bytes_read == 0)
@@ -64,10 +75,11 @@ char *get_next_line(int fd)
     // char *line;
     queue = create_queue();
 
-    buffer = read_file(fd, queue);
+    buffer = read_file(fd, queue, "hel\nworld");
+    
     printf("first: %s\n", queue->front->data);
-    printf("second: %s\n", queue->front->next->data);
+    // printf("second: %s\n", queue->front->next->data);
     printf("rear: %s\n", queue->rear->data);
-    printf("remainder: %s\n", buffer);
+    // printf("remainder: %s\n", buffer);
     return (buffer);
 }
