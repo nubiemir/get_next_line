@@ -40,10 +40,10 @@ typedef unsigned int t_bool;
 #define FALSE 0
 
 char *get_next_line(int fd);
-unsigned int ft_strlen(const char *s);
 void enqueue(t_queue *queue, char *data);
-char *dequeue(t_queue *queue);
 t_queue *create_queue();
 char *read_file(int fd, t_queue *queue, char *remainder);
+char *handle_remainder(t_queue *queue, char *remainder);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 int *find_line(char *str);
 #endif

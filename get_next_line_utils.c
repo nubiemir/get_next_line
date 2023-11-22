@@ -63,15 +63,17 @@ void enqueue(t_queue *queue, char *data)
 		queue->rear = new_node;
 	}
 }
-char *dequeue(t_queue *queue)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	char *data;
+	unsigned int	i;
 
-	if (!queue || queue->front == NULL)
-		return (NULL);
-	data = queue->front->data;
-	queue->front = queue->front->next;
-	if (queue->front == NULL)
-		queue->rear = NULL;
-	return (data);
+	i = 0;
+	if (!(char *) dst && !(char *) src)
+		return (0);
+	while (i < n)
+	{
+		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+		i++;
+	}
+	return (dst);
 }
