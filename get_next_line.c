@@ -36,10 +36,9 @@ char **split_new_line(char *str)
 
 char    *handle_remainder(t_queue *queue, char *remainder)
 {
-        int counter;
         char *buffer;
+        char **split_buffer;
 
-        counter = 0;
         while(!find_line(remainder)[0])
         {
             buffer = (char *)malloc(BUFFER_SIZE * sizeof(char));
@@ -47,6 +46,9 @@ char    *handle_remainder(t_queue *queue, char *remainder)
             enqueue(queue, buffer);
             remainder = remainder + BUFFER_SIZE;
         }
+        split_buffer = split_new_line(remainder);
+        enqueue(queue, split_buffer[0]);
+        return (split_buffer[1]);
 }
 
 char *read_file(int fd, t_queue *queue, char *remainder)
@@ -55,7 +57,7 @@ char *read_file(int fd, t_queue *queue, char *remainder)
     char *buffer;
     char **split_buffer;
 
-    if (remainder && handle_remainder(queue, remainder))
+    if (remainder)
         return (handle_remainder(queue, remainder));
     buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
     bytes_read = read(fd, buffer, BUFFER_SIZE);
@@ -82,8 +84,9 @@ char *get_next_line(int fd)
     queue = create_queue();
 
     buffer = read_file(fd, queue, ";ajs;asfjaf\nj;asjdf");
+    buffer = read_file(fd, queue, buffer);
     
-    // printf("first: %s\n", queue->front->data);
+    printf("first: %s\n", queue->front->data);
     // printf("second: %s\n", queue->front->next->data);
     // printf("rear: %s\n", queue->rear->data);
     printf("remainder: %s\n", buffer);
