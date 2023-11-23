@@ -17,4 +17,5 @@ int main()
 { 
     int fd = open("index.txt", O_RDONLY);
     get_next_line(fd);
+    get_next_line(fd);
 }
