@@ -42,8 +42,8 @@ typedef unsigned int t_bool;
 char *get_next_line(int fd);
 void enqueue(t_queue *queue, char *data);
 t_queue *create_queue();
-char *read_file(int fd, t_queue *queue, char *remainder);
+char *read_file(int fd, t_queue *queue);
 char *handle_remainder(t_queue *queue, char *remainder);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
-int *find_line(char *str);
+int *find_line(char *str);char **split_new_line(char *str);
 #endif

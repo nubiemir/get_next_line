@@ -19,7 +19,7 @@ int *find_line(char *str)
 
     counter = 0;
     res = malloc(sizeof(int) * 2);
-    while (counter < BUFFER_SIZE)
+    while (counter < BUFFER_SIZE && str)
     {
         if (str[counter] == '\n')
         {
