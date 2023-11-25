@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:33 by famir             #+#    #+#             */
-/*   Updated: 2023/11/19 17:09:17 by famir            ###   ########.fr       */
+/*   Updated: 2023/11/25 19:40:15 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define GET_NEXT_LINE_H
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 6
+#define BUFFER_SIZE 12
 #endif
 
 #include <unistd.h>
@@ -41,9 +41,10 @@ typedef unsigned int t_bool;
 
 char *get_next_line(int fd);
 void enqueue(t_queue *queue, char *data);
-t_queue *create_queue();
 char *read_file(int fd, t_queue *queue);
 char *handle_remainder(t_queue *queue, char *remainder);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
-int *find_line(char *str);char **split_new_line(char *str);
+int *find_line(char *str);
+char **split_new_line(char *str, int index);
+char *join_queue(t_queue *queue);
 #endif

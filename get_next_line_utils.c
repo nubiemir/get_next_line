@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:42 by famir             #+#    #+#             */
-/*   Updated: 2023/11/19 17:09:15 by famir            ###   ########.fr       */
+/*   Updated: 2023/11/25 19:14:29 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ int *find_line(char *str)
 {
     int counter;
     int *res;
-
+	
+	if(!str)
+		return (NULL);
     counter = 0;
     res = malloc(sizeof(int) * 2);
-    while (counter < BUFFER_SIZE && str)
+    while (counter < BUFFER_SIZE && str && str[counter])
     {
         if (str[counter] == '\n')
         {
@@ -30,19 +32,8 @@ int *find_line(char *str)
         counter++;
     }
     res[0] = 0;
-    res[1] = 0;
+    res[1] = counter;
     return (res);
-}
-
-t_queue *create_queue()
-{
-	t_queue *queue;
-
-	queue = (t_queue *)malloc(sizeof(t_queue));
-	if (!queue)
-		return (NULL);
-	queue->front = queue->rear = NULL;
-	return queue;
 }
 
 void enqueue(t_queue *queue, char *data)
@@ -76,4 +67,37 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 		i++;
 	}
 	return (dst);
+}
+
+char *join_queue(t_queue *queue)
+{
+	char *res;
+	int	res_size;
+	int counter;
+	t_node *temp;
+
+	res_size = 0;
+	counter = 0;
+	temp = queue->front;
+	while (temp)
+	{
+		while (temp->data[counter])
+			counter++;
+		res_size += counter;
+		counter = 0;		
+		temp = temp->next;
+	}
+	res = (char *)malloc(res_size * sizeof(char));
+	temp = queue->front;
+	res_size = 0;
+	while (temp)
+	{
+		while (temp->data[counter])
+			res[res_size++] = temp->data[counter++];
+		counter = 0;		
+		temp = temp->next;
+	}
+	if (res_size == 0)
+		return (NULL);
+	return (res);
 }
