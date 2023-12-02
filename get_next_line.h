@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:33 by famir             #+#    #+#             */
-/*   Updated: 2023/12/02 15:51:00 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/02 16:21:27 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,5 @@ int		*find_line(char *str);
 char	**split_new_line(char *str, int index);
 char	*join_queue(t_queue *queue);
 t_queue	*create_queue(void);
-void	safe_free(void **ptr);
 
 #endif

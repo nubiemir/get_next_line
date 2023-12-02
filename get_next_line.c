@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 20:00:20 by famir             #+#    #+#             */
-/*   Updated: 2023/12/02 16:19:37 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/02 16:22:40 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ char	*handle_remainder(t_queue *queue, char *remainder)
 		ft_memcpy(buffer, remainder, line_exist[1]);
 		enqueue(queue, buffer);
 		remainder = remainder + line_exist[1];
-		free(line_exist);
-		free(buffer);
 		line_exist = find_line(remainder);
 	}
 	if (line_exist[0])
@@ -59,7 +57,6 @@ char	*handle_remainder(t_queue *queue, char *remainder)
 		remainder = split_buffer[1];
 		return (remainder);
 	}
-	free(line_exist);
 	return (NULL);
 }
 
@@ -117,6 +114,5 @@ char	*get_next_line(int fd)
 	line = join_queue(queue);
 	if (line == NULL)
 		return (NULL);
-	free(line);
 	return (line);
 }
