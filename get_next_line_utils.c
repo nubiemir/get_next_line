@@ -1,39 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_v2.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
+/*   By: htekeste <htekeste@student.abudhabi42.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:42 by famir             #+#    #+#             */
-/*   Updated: 2023/12/02 16:20:42 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/12 01:04:16 by htekeste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	*find_line(char *str)
+void	*dequeue(t_queue *queue)
 {
-	int	counter;
-	int	*res;
+	char *data;
 
-	if (!str)
+	if (!queue || queue->front == NULL)
 		return (NULL);
-	counter = 0;
-	res = malloc(sizeof(int) * 2);
-	while (counter < BUFFER_SIZE && str && str[counter])
-	{
-		if (str[counter] == '\n')
-		{
-			res[0] = 1;
-			res[1] = counter;
-			return (res);
-		}
-		counter++;
-	}
-	res[0] = 0;
-	res[1] = counter;
-	return (res);
+	data = queue->front->data;
+	queue->front = queue->front->next;
+	if (queue->front == NULL)
+		queue->rear = NULL;
+	return (data);
 }
 
 void	enqueue(t_queue *queue, char *data)
