@@ -1,95 +1,91 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_v2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
+/*   By: htekeste <htekeste@student.abudhabi42.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 20:00:20 by famir             #+#    #+#             */
-/*   Updated: 2023/12/02 16:22:40 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/12 00:56:25 by htekeste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	**split_new_line(char *str, int index)
+void	*split_new_line(char *str, int index, char **left, char **right)
 {
-	char	**res;
 	int		counter;
 
 	counter = 0;
-	res = (char **)malloc(3 * sizeof(char **));
-	res[0] = (char *)malloc((index + 1) * sizeof(char));
-	res[1] = (char *)malloc((BUFFER_SIZE - index) * sizeof(char));
+	*left = (char *)malloc((index + 1) * sizeof(char));
+	*right = (char *)malloc((BUFFER_SIZE - index) * sizeof(char));
 	while (counter < index + 1 && str[counter])
 	{
-		res[0][counter] = str[counter];
+		(*left)[counter] = str[counter];
 		counter++;
 	}
+	(*left)[counter] = '\0';
 	if (str[counter])
-		res[1] = str + counter;
-	else
-		res[1] = NULL;
-	return (res);
+		*right = str + counter;
 }
 
-char	*handle_remainder(t_queue *queue, char *remainder)
+t_bool	line_exist(t_queue *queue,  char **str)
 {
-	char	*buffer;
-	char	**split_buffer;
-	int		*line_exist;
+	int		i;
+	char	*temp;
+	char	*left;
+	char	*right;
 
-	if (!remainder)
-		return (NULL);
-	line_exist = find_line(remainder);
-	while (!line_exist[0] && *remainder)
+	temp = *str;
+	i = 0;
+	while ( temp && temp[i])
 	{
-		buffer = (char *)malloc(line_exist[1] * sizeof(char));
-		ft_memcpy(buffer, remainder, line_exist[1]);
-		enqueue(queue, buffer);
-		remainder = remainder + line_exist[1];
-		line_exist = find_line(remainder);
+		if (temp[i] == '\n')
+		{
+			split_new_line(temp, i, &left, &right);
+			enqueue(queue, left);
+			*str = right;
+			return (TRUE);
+		}
+		i++;
 	}
-	if (line_exist[0])
+	enqueue(queue, *str);
+	*str = NULL;
+	return (FALSE);
+}
+
+char	*handle_remainder(t_queue *queue, char **remainder)
+{
+	char *line;
+
+	if (!(*remainder))
+		return (NULL);
+	if (line_exist(queue, remainder))
 	{
-		split_buffer = split_new_line(remainder, line_exist[1]);
-		enqueue(queue, split_buffer[0]);
-		remainder = split_buffer[1];
-		return (remainder);
+		line = dequeue(queue);
+		return (line);
 	}
 	return (NULL);
 }
 
-char	*read_file(int fd, t_queue *queue)
+t_bool	read_file(int fd, t_queue *queue, char **remainder)
 {
 	int		bytes_read;
 	char	*buffer;
-	char	**split_buffer;
-	int		*line_exist;
 
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	if (bytes_read == 0)
-		return (NULL);
+	if((bytes_read = read(fd, buffer, BUFFER_SIZE)) == 0)
+		return (FALSE);
 	buffer[bytes_read] = '\0';
-	line_exist = find_line(buffer);
-	while (!line_exist[0])
+	while(!line_exist(queue, &buffer))
 	{
-		enqueue(queue, buffer);
 		buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == 0)
-			return (NULL);
+		if((bytes_read = read(fd, buffer, BUFFER_SIZE)) == 0)
+			return (FALSE);
 		buffer[bytes_read] = '\0';
-		line_exist = find_line(buffer);
 	}
-	if (line_exist[0])
-	{
-		split_buffer = split_new_line(buffer, line_exist[1]);
-		enqueue(queue, split_buffer[0]);
-		return (split_buffer[1]);
-	}
-	return (NULL);
+	*remainder = buffer;
+	return (TRUE);
 }
 
 char	*get_next_line(int fd)
@@ -103,16 +99,12 @@ char	*get_next_line(int fd)
 	if (BUFFER_SIZE > 2147483647)
 		return (NULL);
 	queue = create_queue();
-	remainder = handle_remainder(queue, remainder);
-	if (queue->rear)
+	line = handle_remainder(queue, &remainder);
+	if (!line)
 	{
-		if (!find_line(queue->rear->data)[0])
-			remainder = read_file(fd, queue);
+		if (read_file(fd, queue, &remainder) == FALSE)
+			remainder = NULL;
+		line = join_queue(queue);
 	}
-	else
-		remainder = read_file(fd, queue);
-	line = join_queue(queue);
-	if (line == NULL)
-		return (NULL);
 	return (line);
 }
