@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_v2.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
+/*   By: htekeste <htekeste@student.abudhabi42.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:33 by famir             #+#    #+#             */
-/*   Updated: 2023/12/02 16:21:27 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/12 00:50:37 by htekeste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 12
+#  define BUFFER_SIZE 6
 # endif
 
 # include <unistd.h>
@@ -41,11 +41,11 @@ typedef unsigned int	t_bool;
 
 char	*get_next_line(int fd);
 void	enqueue(t_queue *queue, char *data);
-char	*read_file(int fd, t_queue *queue);
-char	*handle_remainder(t_queue *queue, char *remainder);
+t_bool	read_file(int fd, t_queue *queue, char **remainder);
+char	*handle_remainder(t_queue *queue, char **remainder);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
-int		*find_line(char *str);
-char	**split_new_line(char *str, int index);
+void	*dequeue(t_queue *queue);
+void	*split_new_line(char *str, int index, char **left, char **right);
 char	*join_queue(t_queue *queue);
 t_queue	*create_queue(void);
 
