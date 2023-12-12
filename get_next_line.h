@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_v2.h                                 :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htekeste <htekeste@student.abudhabi42.a    +#+  +:+       +#+        */
+/*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:33 by famir             #+#    #+#             */
-/*   Updated: 2023/12/12 00:50:37 by htekeste         ###   ########.fr       */
+/*   Updated: 2023/12/12 19:59:11 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,11 @@ char	*get_next_line(int fd);
 void	enqueue(t_queue *queue, char *data, int size);
 t_bool	read_file(int fd, t_queue *queue, char **remainder);
 char	*handle_remainder(t_queue *queue, char **remainder);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*dequeue(t_queue *queue);
 void	split_new_line(char *str, int index, char **left, char **right);
 char	*join_queue(t_queue *queue);
+t_bool	line_exist(t_queue *queue, char **str);
 t_queue	*create_queue(void);
+void	safe_free(void **ptr);
 
 #endif

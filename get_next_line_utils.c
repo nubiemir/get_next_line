@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_v2.c                           :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htekeste <htekeste@student.abudhabi42.a    +#+  +:+       +#+        */
+/*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:42 by famir             #+#    #+#             */
-/*   Updated: 2023/12/12 01:04:16 by htekeste         ###   ########.fr       */
+/*   Updated: 2023/12/12 21:26:17 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 
 void	*dequeue(t_queue *queue)
 {
-	char *data;
-
+	char	*data;
+	t_node	*node;
+	
+	node = queue->front;
 	if (!queue || queue->front == NULL)
 		return (NULL);
 	data = queue->front->data;
 	queue->front = queue->front->next;
 	if (queue->front == NULL)
 		queue->rear = NULL;
+	safe_free((void **) &node);
 	return (data);
 }
 
@@ -30,11 +33,13 @@ void	enqueue(t_queue *queue, char *data, int size)
 	t_node	*new_node;
 
 	new_node = (t_node *)malloc(sizeof(t_node));
+	if (!new_node)
+		return (safe_free((void **) &new_node));
 	new_node->data = data;
 	new_node->next = NULL;
 	if (queue->front == NULL)
 	{
-		queue->front = new_node; 
+		queue->front = new_node;
 		queue->rear = new_node;
 	}
 	else
@@ -45,19 +50,12 @@ void	enqueue(t_queue *queue, char *data, int size)
 	queue->size += size;
 }
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	safe_free(void **ptr)
 {
-	unsigned int	i;
-
-	i = 0;
-	if (!(char *) dst && !(char *) src)
-		return (0);
-	while (i < n)
-	{
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-		i++;
-	}
-	return (dst);
+	if (ptr == NULL)
+		return ;
+	free(*ptr);
+	*ptr = NULL;
 }
 
 char	*join_queue(t_queue *queue)
@@ -65,19 +63,24 @@ char	*join_queue(t_queue *queue)
 	char	*res;
 	int		counter;
 	int		res_size;
-
+	t_node	*temp;
+	
 	counter = 0;
 	res_size = 0;
-	res = (char *)malloc(queue->size * sizeof(char));
-	while (queue->front)
+	res = (char *)malloc((queue->size + 1) * sizeof(char));
+	if (!res)
+		return (NULL);
+	temp = queue->front;
+	while (temp)
 	{
-		while (queue->front->data[counter])
-			res[res_size++] = queue->front->data[counter++];
+		while (temp->data[counter])
+			res[res_size++] = temp->data[counter++];
 		counter = 0;
-		queue->front = queue->front->next;
+		temp = temp->next;
 	}
 	if (res_size == 0)
 		return (NULL);
+	res[res_size] = '\0';
 	return (res);
 }
 

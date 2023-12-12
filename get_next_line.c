@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_v2.c                                 :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: htekeste <htekeste@student.abudhabi42.a    +#+  +:+       +#+        */
+/*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 20:00:20 by famir             #+#    #+#             */
-/*   Updated: 2023/12/12 00:56:25 by htekeste         ###   ########.fr       */
+/*   Updated: 2023/12/12 21:33:37 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,13 @@ void	split_new_line(char *str, int index, char **left, char **right)
 	int		counter;
 
 	counter = 0;
-	*left = (char *)malloc((index + 1) * sizeof(char));
-	*right = (char *)malloc((BUFFER_SIZE - index) * sizeof(char));
+	*left = (char *)malloc((index + 2) * sizeof(char));
+	if ((BUFFER_SIZE - index) > 1)
+		*right = (char *)malloc((BUFFER_SIZE - index) * sizeof(char));
+	if (!left)
+		return (safe_free((void **) right));
+	if (!right)
+		return (safe_free((void **) left));
 	while (counter < index + 1 && str[counter])
 	{
 		(*left)[counter] = str[counter];
@@ -29,7 +34,7 @@ void	split_new_line(char *str, int index, char **left, char **right)
 		*right = str + counter;
 }
 
-t_bool	line_exist(t_queue *queue,  char **str)
+t_bool	line_exist(t_queue *queue, char **str)
 {
 	int		i;
 	char	*temp;
@@ -38,7 +43,7 @@ t_bool	line_exist(t_queue *queue,  char **str)
 
 	temp = *str;
 	i = 0;
-	while ( temp && temp[i])
+	while (temp && temp[i])
 	{
 		if (temp[i] == '\n')
 		{
@@ -56,7 +61,7 @@ t_bool	line_exist(t_queue *queue,  char **str)
 
 char	*handle_remainder(t_queue *queue, char **remainder)
 {
-	char *line;
+	char	*line;
 
 	if (!(*remainder))
 		return (NULL);
@@ -74,13 +79,19 @@ t_bool	read_file(int fd, t_queue *queue, char **remainder)
 	char	*buffer;
 
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if((bytes_read = read(fd, buffer, BUFFER_SIZE)) == 0)
+	if (!buffer)
+		return (FALSE);
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read == 0)
 		return (FALSE);
 	buffer[bytes_read] = '\0';
-	while(!line_exist(queue, &buffer))
+	while (!line_exist(queue, &buffer))
 	{
 		buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
-		if((bytes_read = read(fd, buffer, BUFFER_SIZE)) == 0)
+		if (!buffer)
+			return (FALSE);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == 0)
 			return (FALSE);
 		buffer[bytes_read] = '\0';
 	}
@@ -106,5 +117,6 @@ char	*get_next_line(int fd)
 			remainder = NULL;
 		line = join_queue(queue);
 	}
+	safe_free((void **)&queue);
 	return (line);
 }

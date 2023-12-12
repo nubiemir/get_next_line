@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:24:37 by famir             #+#    #+#             */
-/*   Updated: 2023/12/02 16:21:53 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/12 21:17:30 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ int	main(void)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		printf("%s", line); 
+		printf("%s", line);
+		safe_free((void **) &line);
 		line = get_next_line(fd);
 	}
+	safe_free((void **) &line);
 }
