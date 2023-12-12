@@ -32,6 +32,7 @@ typedef struct queue
 {
 	t_node	*front;
 	t_node	*rear;
+	int		size;
 }	t_queue;
 
 typedef unsigned int	t_bool;
@@ -40,12 +41,12 @@ typedef unsigned int	t_bool;
 # define FALSE 0
 
 char	*get_next_line(int fd);
-void	enqueue(t_queue *queue, char *data);
+void	enqueue(t_queue *queue, char *data, int size);
 t_bool	read_file(int fd, t_queue *queue, char **remainder);
 char	*handle_remainder(t_queue *queue, char **remainder);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*dequeue(t_queue *queue);
-void	*split_new_line(char *str, int index, char **left, char **right);
+void	split_new_line(char *str, int index, char **left, char **right);
 char	*join_queue(t_queue *queue);
 t_queue	*create_queue(void);
 

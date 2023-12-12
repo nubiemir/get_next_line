@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-void	*split_new_line(char *str, int index, char **left, char **right)
+void	split_new_line(char *str, int index, char **left, char **right)
 {
 	int		counter;
 
@@ -43,13 +43,13 @@ t_bool	line_exist(t_queue *queue,  char **str)
 		if (temp[i] == '\n')
 		{
 			split_new_line(temp, i, &left, &right);
-			enqueue(queue, left);
+			enqueue(queue, left, i + 1);
 			*str = right;
 			return (TRUE);
 		}
 		i++;
 	}
-	enqueue(queue, *str);
+	enqueue(queue, *str, i);
 	*str = NULL;
 	return (FALSE);
 }

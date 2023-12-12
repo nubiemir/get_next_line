@@ -25,7 +25,7 @@ void	*dequeue(t_queue *queue)
 	return (data);
 }
 
-void	enqueue(t_queue *queue, char *data)
+void	enqueue(t_queue *queue, char *data, int size)
 {
 	t_node	*new_node;
 
@@ -42,6 +42,7 @@ void	enqueue(t_queue *queue, char *data)
 		queue->rear->next = new_node;
 		queue->rear = new_node;
 	}
+	queue->size += size;
 }
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
@@ -62,30 +63,18 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 char	*join_queue(t_queue *queue)
 {
 	char	*res;
-	int		res_size;
 	int		counter;
-	t_node	*temp;
+	int		res_size;
 
-	res_size = 0;
 	counter = 0;
-	temp = queue->front;
-	while (temp)
-	{
-		while (temp->data[counter])
-			counter++;
-		res_size += counter;
-		counter = 0;
-		temp = temp->next;
-	}
-	res = (char *)malloc(res_size * sizeof(char));
-	temp = queue->front;
 	res_size = 0;
-	while (temp)
+	res = (char *)malloc(queue->size * sizeof(char));
+	while (queue->front)
 	{
-		while (temp->data[counter])
-			res[res_size++] = temp->data[counter++];
+		while (queue->front->data[counter])
+			res[res_size++] = queue->front->data[counter++];
 		counter = 0;
-		temp = temp->next;
+		queue->front = queue->front->next;
 	}
 	if (res_size == 0)
 		return (NULL);
@@ -101,5 +90,6 @@ t_queue	*create_queue(void)
 		return (NULL);
 	queue->front = NULL;
 	queue->rear = NULL;
+	queue->size = 0;
 	return (queue);
 }
