@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 20:00:20 by famir             #+#    #+#             */
-/*   Updated: 2023/12/12 21:33:37 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/18 21:18:07 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,29 @@ void	split_new_line(char *str, int index, char **left, char **right)
 	counter = 0;
 	*left = (char *)malloc((index + 2) * sizeof(char));
 	if ((BUFFER_SIZE - index) > 1)
+	{
 		*right = (char *)malloc((BUFFER_SIZE - index) * sizeof(char));
-	if (!left)
+		if ((!(*right) || !str) && *left)
+			return (safe_free((void **) left));
+		if (!(*right) || !str)
+			return ;
+	}
+	if ((!(*left) || !str) && right)
 		return (safe_free((void **) right));
-	if (!right)
-		return (safe_free((void **) left));
+	if (!(*left) || !str)
+		return ;
 	while (counter < index + 1 && str[counter])
 	{
 		(*left)[counter] = str[counter];
 		counter++;
 	}
 	(*left)[counter] = '\0';
-	if (str[counter])
-		*right = str + counter;
+	counter = 0;
+	while (str[counter + index + 1])
+	{
+		(*right)[counter] = str[counter + index];
+		counter++;
+	}
 }
 
 t_bool	line_exist(t_queue *queue, char **str)
@@ -41,6 +51,8 @@ t_bool	line_exist(t_queue *queue, char **str)
 	char	*left;
 	char	*right;
 
+	if (!queue || !(*str))
+		return (FALSE);
 	temp = *str;
 	i = 0;
 	while (temp && temp[i])
@@ -55,7 +67,6 @@ t_bool	line_exist(t_queue *queue, char **str)
 		i++;
 	}
 	enqueue(queue, *str, i);
-	*str = NULL;
 	return (FALSE);
 }
 
@@ -63,7 +74,7 @@ char	*handle_remainder(t_queue *queue, char **remainder)
 {
 	char	*line;
 
-	if (!(*remainder))
+	if (!(*remainder) || !queue)
 		return (NULL);
 	if (line_exist(queue, remainder))
 	{
@@ -107,7 +118,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (BUFFER_SIZE > 2147483647)
+	if (BUFFER_SIZE > 2147483647) 
 		return (NULL);
 	queue = create_queue();
 	line = handle_remainder(queue, &remainder);
@@ -117,6 +128,5 @@ char	*get_next_line(int fd)
 			remainder = NULL;
 		line = join_queue(queue);
 	}
-	safe_free((void **)&queue);
 	return (line);
 }

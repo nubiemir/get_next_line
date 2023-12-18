@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:42 by famir             #+#    #+#             */
-/*   Updated: 2023/12/12 21:26:17 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/18 20:30:23 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,13 @@
 void	*dequeue(t_queue *queue)
 {
 	char	*data;
-	t_node	*node;
 	
-	node = queue->front;
 	if (!queue || queue->front == NULL)
 		return (NULL);
 	data = queue->front->data;
 	queue->front = queue->front->next;
 	if (queue->front == NULL)
 		queue->rear = NULL;
-	safe_free((void **) &node);
 	return (data);
 }
 
@@ -34,7 +31,7 @@ void	enqueue(t_queue *queue, char *data, int size)
 
 	new_node = (t_node *)malloc(sizeof(t_node));
 	if (!new_node)
-		return (safe_free((void **) &new_node));
+		return ;
 	new_node->data = data;
 	new_node->next = NULL;
 	if (queue->front == NULL)
@@ -68,7 +65,7 @@ char	*join_queue(t_queue *queue)
 	counter = 0;
 	res_size = 0;
 	res = (char *)malloc((queue->size + 1) * sizeof(char));
-	if (!res)
+	if (!res || !queue)
 		return (NULL);
 	temp = queue->front;
 	while (temp)

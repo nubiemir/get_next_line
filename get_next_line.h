@@ -6,7 +6,7 @@
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 19:56:33 by famir             #+#    #+#             */
-/*   Updated: 2023/12/12 19:59:11 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/16 15:59:09 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 6
+#  define BUFFER_SIZE 12
 # endif
 
 # include <unistd.h>
