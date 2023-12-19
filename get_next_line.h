@@ -44,7 +44,7 @@ char	*get_next_line(int fd);
 void	enqueue(t_queue *queue, char *data, int size);
 t_bool	read_file(int fd, t_queue *queue, char **remainder);
 char	*handle_remainder(t_queue *queue, char **remainder);
-void	*dequeue(t_queue *queue);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	split_new_line(char *str, int index, char **left, char **right);
 char	*join_queue(t_queue *queue);
 t_bool	line_exist(t_queue *queue, char **str);

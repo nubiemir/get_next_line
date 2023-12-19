@@ -14,9 +14,6 @@
 
 void	split_new_line(char *str, int index, char **left, char **right)
 {
-	int		counter;
-
-	counter = 0;
 	*left = (char *)malloc((index + 2) * sizeof(char));
 	if ((BUFFER_SIZE - index) > 1)
 	{
@@ -30,18 +27,9 @@ void	split_new_line(char *str, int index, char **left, char **right)
 		return (safe_free((void **) right));
 	if (!(*left) || !str)
 		return ;
-	while (counter < index + 1 && str[counter])
-	{
-		(*left)[counter] = str[counter];
-		counter++;
-	}
-	(*left)[counter] = '\0';
-	counter = 0;
-	while (str[counter + index + 1])
-	{
-		(*right)[counter] = str[counter + index];
-		counter++;
-	}
+	ft_memcpy(left, str, index + 1);
+	(*left)[index + 1] = '\0';
+	ft_memcpy(right, (str + index + 1), BUFFER_SIZE - index);
 }
 
 t_bool	line_exist(t_queue *queue, char **str)
@@ -78,7 +66,7 @@ char	*handle_remainder(t_queue *queue, char **remainder)
 		return (NULL);
 	if (line_exist(queue, remainder))
 	{
-		line = dequeue(queue);
+		line = queue->front->data;
 		return (line);
 	}
 	return (NULL);
