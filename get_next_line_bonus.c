@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: famir <famir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/07 20:00:20 by famir             #+#    #+#             */
-/*   Updated: 2023/12/20 21:15:09 by famir            ###   ########.fr       */
+/*   Updated: 2023/12/20 21:13:07 by famir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 t_bool	line_exist(t_queue *queue, char **str)
 {
@@ -43,7 +43,7 @@ char	*handle_remainder(t_queue *queue, char **remainder)
 {
 	char	*line;
 
-	if (!(*remainder) || !queue)
+	if (!(remainder) || !queue)
 		return (NULL);
 	if (line_exist(queue, remainder))
 	{
@@ -81,7 +81,7 @@ t_bool	read_file(int fd, t_queue *queue, char **remainder)
 
 char	*get_next_line(int fd)
 {
-	static char	*remainder;
+	static char	*remainder[1024];
 	t_queue		*queue;
 	char		*line;
 
@@ -90,11 +90,11 @@ char	*get_next_line(int fd)
 	if (BUFFER_SIZE > 2147483647)
 		return (NULL);
 	queue = create_queue();
-	line = handle_remainder(queue, &remainder);
+	line = handle_remainder(queue, &remainder[fd]);
 	if (!line)
 	{
-		if (read_file(fd, queue, &remainder) == FALSE)
-			remainder = NULL;
+		if (read_file(fd, queue, &remainder[fd]) == FALSE)
+			remainder[fd] = NULL;
 		line = join_queue(queue);
 	}
 	free_queue(&queue);
